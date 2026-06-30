@@ -1,4 +1,6 @@
 const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
+
+// ⚠️ ЗАМЕНИ НА СВОЙ CLIENT ID!
 const DISCORD_CLIENT_ID = 'rem7AyKKqHBm9i_c8jeTpTYovHQaDqE1';
 const REDIRECT_URI = 'https://itzrealexe-rgb.github.io/wentik.github.io/callback.html';
 
@@ -28,9 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = getUser();
         if (user) {
             authBtn.textContent = `👤 ${user.username}`;
+            authBtn.href = '#';
+            authBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
         } else {
             authBtn.textContent = 'Login with Discord';
-            authBtn.addEventListener('click', loginWithDiscord);
+            authBtn.href = '#';
+            authBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginWithDiscord();
+            });
         }
     }
 });
