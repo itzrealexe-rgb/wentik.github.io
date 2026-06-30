@@ -1,6 +1,6 @@
-const DISCORD_CLIENT_ID = 'YOUR_CLIENT_ID';
-const REDIRECT_URI = 'https://wentik.github.io/callback.html';
-const API_BASE = 'https://your-api.onrender.com';
+const DISCORD_CLIENT_ID = 'rem7AyKKqHBm9i_c8jeTpTYovHQaDqE1';
+const REDIRECT_URI = 'https://itzrealexe-rgb.github.io/callback.html';
+const API_BASE = 'discrod-aternos-server-production.up.railway.app
 
 function loginWithDiscord() {
     const url = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds`;
