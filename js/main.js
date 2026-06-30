@@ -1,4 +1,4 @@
-const API_BASE = 'https://your-api.onrender.com';
+const API_BASE = 'discrod-aternos-server-production.up.railway.app
 
 async function fetchStats() {
     try {
