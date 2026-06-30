@@ -8,17 +8,20 @@
         const code = params.get('code');
         
         if (code) {
-            // Отправляем код на бекенд для обмена на токен
-            fetch('https://your-api.onrender.com/discord-bot-aternos-api/auth/callback', {
+            fetch('https://discrod-aternos-server-production.up.railway.app/api/auth/callback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ code })
             })
             .then(res => res.json())
             .then(data => {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-                window.location.href = 'dashboard.html';
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
             })
             .catch(() => {
                 window.location.href = 'index.html';
