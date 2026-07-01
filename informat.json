@@ -1,0 +1,20 @@
+{
+  "discord": {
+    "clientId": "1489179864006393876",
+    "redirectUri": "https://aternos-dc-bot.vercel.app/
+  },
+  "api": {
+    "baseUrl": "https://discrod-aternos-server-production.up.railway.app"
+  },
+  "admin": {
+    "userId": "1489179864006393876"
+  },
+  "bot": {
+    "name": "Aternos",
+    "id": "1489179864006393876"
+  },
+  "links": {
+    "github": "https://github.com/itzrealexe-rgb",
+    "discord": "https://discord.gg/your-invite"
+  }
+}
