@@ -2,7 +2,7 @@ const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
 
 // ========== ПРАВИЛЬНЫЙ CLIENT ID (ЧИСЛО!) ==========
 const DISCORD_CLIENT_ID = '1489179864006393876';
-const REDIRECT_URI = 'https://itzrealexe-rgb.github.io/wentik.github.io/callback.html';
+const REDIRECT_URI = 'https://aternos-dc-bot.vercel.app/'
 
 // ========== КУКИ ==========
 function setCookie(name, value, days = 30) {
