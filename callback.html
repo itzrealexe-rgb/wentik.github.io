@@ -1,47 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Redirecting...</title>
+<head><meta charset="UTF-8"><title>Redirecting...</title></head>
+<body style="background:#0a0a0f;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;flex-direction:column;">
+    <div style="font-size:48px;">⏳</div>
+    <h1>Logging in...</h1>
+    <p style="color:#707070;">Please wait...</p>
     <script>
-        const params = new URLSearchParams(window.location.search);
-        const code = params.get('code');
-        
-        if (code) {
-            fetch('https://discrod-aternos-server-production.up.railway.app/api/auth/callback', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code })
-            })
-            .then(res => {
-                if (!res.ok) throw new Error('Auth failed');
-                return res.json();
-            })
-            .then(data => {
+        (async () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code');
+            if (!code) { window.location.href = '/'; return; }
+
+            try {
+                const configRes = await fetch('/informat.json');
+                const config = await configRes.json();
+                const apiBase = config.api.baseUrl;
+
+                const res = await fetch(`${apiBase}/api/auth/callback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                const data = await res.json();
+
                 if (data.success) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('user', JSON.stringify(data.user));
-                    // Сохраняем в куки
                     document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=2592000; SameSite=Lax`;
                     document.cookie = `token=${data.token}; path=/; max-age=2592000; SameSite=Lax`;
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard.html';
                 } else {
-                    window.location.href = 'index.html';
+                    window.location.href = '/';
                 }
-            })
-            .catch(() => {
-                window.location.href = 'index.html';
-            });
-        } else {
-            window.location.href = 'index.html';
-        }
+            } catch (e) {
+                console.error(e);
+                window.location.href = '/';
+            }
+        })();
     </script>
-</head>
-<body>
-    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a0a0f;color:#e0e0e0;font-family:sans-serif;flex-direction:column;gap:20px;">
-        <div style="font-size:48px;">⏳</div>
-        <h1>Logging in...</h1>
-        <p style="color:#707070;">Please wait while we connect to Discord.</p>
-    </div>
 </body>
 </html>
