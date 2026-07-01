@@ -1,7 +1,7 @@
 {
   "discord": {
     "clientId": "1489179864006393876",
-    "redirectUri": "https://aternos-dc-bot.vercel.app/
+    "redirectUri": "https://aternos-dc-bot.vercel.app/callback.html"
   },
   "api": {
     "baseUrl": "https://discrod-aternos-server-production.up.railway.app"
