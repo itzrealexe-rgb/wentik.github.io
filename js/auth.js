@@ -1,7 +1,7 @@
 const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
 
 // ⚠️ ЗАМЕНИ НА СВОЙ CLIENT ID!
-const DISCORD_CLIENT_ID = 'rem7AyKKqHBm9i_c8jeTpTYovHQaDqE1';
+const DISCORD_CLIENT_ID = '1489179864006393876';
 const REDIRECT_URI = 'https://itzrealexe-rgb.github.io/wentik.github.io/callback.html';
 
 function loginWithDiscord() {
