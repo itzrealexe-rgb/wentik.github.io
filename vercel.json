@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/servers", "dest": "/servers.html" },
+    { "src": "/dashboard", "dest": "/dashboard.html" },
+    { "src": "/callback", "dest": "/callback.html" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
