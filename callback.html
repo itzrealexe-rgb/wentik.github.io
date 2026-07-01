@@ -21,6 +21,9 @@
                 if (data.success) {
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('user', JSON.stringify(data.user));
+                    // Сохраняем в куки
+                    document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=2592000; SameSite=Lax`;
+                    document.cookie = `token=${data.token}; path=/; max-age=2592000; SameSite=Lax`;
                     window.location.href = 'dashboard.html';
                 } else {
                     window.location.href = 'index.html';
@@ -35,6 +38,10 @@
     </script>
 </head>
 <body>
-    <h1>⏳ Logging in...</h1>
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a0a0f;color:#e0e0e0;font-family:sans-serif;flex-direction:column;gap:20px;">
+        <div style="font-size:48px;">⏳</div>
+        <h1>Logging in...</h1>
+        <p style="color:#707070;">Please wait while we connect to Discord.</p>
+    </div>
 </body>
 </html>
