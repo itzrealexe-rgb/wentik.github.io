@@ -1,8 +1,18 @@
+// ========== КОНФИГ ==========
+let CONFIG = null;
 const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
 
-// ========== ПРАВИЛЬНЫЙ CLIENT ID (ЧИСЛО!) ==========
-const DISCORD_CLIENT_ID = '1489179864006393876';
-const REDIRECT_URI = 'https://aternos-dc-bot.vercel.app/'
+async function loadConfig() {
+    if (CONFIG) return CONFIG;
+    try {
+        const res = await fetch('/informat.json');
+        CONFIG = await res.json();
+        return CONFIG;
+    } catch (e) {
+        console.error('Failed to load config:', e);
+        return null;
+    }
+}
 
 // ========== КУКИ ==========
 function setCookie(name, value, days = 30) {
@@ -13,11 +23,8 @@ function setCookie(name, value, days = 30) {
 function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     if (match) {
-        try {
-            return JSON.parse(decodeURIComponent(match[2]));
-        } catch (e) {
-            return null;
-        }
+        try { return JSON.parse(decodeURIComponent(match[2])); } 
+        catch (e) { return null; }
     }
     return null;
 }
@@ -61,12 +68,17 @@ function logout() {
     localStorage.removeItem('token');
     deleteCookie('user');
     deleteCookie('token');
-    window.location.href = 'index.html';
+    window.location.href = '/';
 }
 
 // ========== ЛОГИН ==========
-function loginWithDiscord() {
-    const url = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds%20guilds.members.read`;
+async function loginWithDiscord() {
+    const config = await loadConfig();
+    if (!config) {
+        alert('Failed to load config');
+        return;
+    }
+    const url = `https://discord.com/oauth2/authorize?client_id=${config.discord.clientId}&redirect_uri=${encodeURIComponent(config.discord.redirectUri)}&response_type=code&scope=identify%20guilds%20guilds.members.read`;
     window.location.href = url;
 }
 
@@ -95,6 +107,7 @@ function showCookieConsent() {
 
 // ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
+    loadConfig();
     showCookieConsent();
     
     const authBtn = document.getElementById('auth-btn');
@@ -116,7 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// ========== EXPORT ==========
 window.loginWithDiscord = loginWithDiscord;
 window.logout = logout;
 window.getUser = getUser;
 window.getToken = getToken;
+window.loadConfig = loadConfig;
