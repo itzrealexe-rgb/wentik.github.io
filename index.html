@@ -1,128 +1,53 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wentik — Discord Bot Control Center</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Redirecting...</title>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        
+        async function handleCallback() {
+            if (!code) {
+                window.location.href = '/';
+                return;
+            }
+            
+            try {
+                const configRes = await fetch('/informat.json');
+                const config = await configRes.json();
+                const apiBase = config.api.baseUrl;
+                
+                const res = await fetch(`${apiBase}/api/auth/callback`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    document.cookie = `user=${encodeURIComponent(JSON.stringify(data.user))}; path=/; max-age=2592000; SameSite=Lax`;
+                    document.cookie = `token=${data.token}; path=/; max-age=2592000; SameSite=Lax`;
+                    window.location.href = '/dashboard.html';
+                } else {
+                    window.location.href = '/';
+                }
+            } catch (e) {
+                console.error('Auth error:', e);
+                window.location.href = '/';
+            }
+        }
+        
+        handleCallback();
+    </script>
 </head>
 <body>
-    <!-- ========== АНИМИРОВАННЫЙ ФОН С ТОЧКАМИ ========== -->
-    <div id="particles"></div>
-    <div class="gradient-bg"></div>
-    <div class="glow-orb glow-orb-1"></div>
-    <div class="glow-orb glow-orb-2"></div>
-    <div class="glow-orb glow-orb-3"></div>
-
-    <!-- ========== НАВИГАЦИЯ ========== -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">Wentik</span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html" class="active">Home</a>
-                <a href="servers.html">Servers</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="#" id="auth-btn" class="btn btn-discord">Login with Discord</a>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ========== ГЕРОЙ ========== -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-badge">🔥 BETA</div>
-            <h1 class="hero-title">
-                Your Discord Bot <br><span>Control Center</span>
-            </h1>
-            <p class="hero-desc">
-                Manage your bots, monitor servers, and control everything from one place.
-            </p>
-            <div class="hero-buttons">
-                <a href="servers.html" class="btn btn-primary">Get Started</a>
-                <a href="dashboard.html" class="btn btn-secondary">Dashboard</a>
-            </div>
-            
-            <!-- ========== СТАТИСТИКА ========== -->
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-servers">0</div>
-                    <div class="stat-label">Servers</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-users">0</div>
-                    <div class="stat-label">Users</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="stat-uptime">0h</div>
-                    <div class="stat-label">Uptime</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== ФИЧИ ========== -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">🚀 Features</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎮</div>
-                    <h3>Game Integration</h3>
-                    <p>Play Tic-Tac-Toe, Sea Battle, and more with friends.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>File Library</h3>
-                    <p>Upload, share, and manage files with AI moderation.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🤖</div>
-                    <h3>AI Moderation</h3>
-                    <p>Smart filters for NSFW, spam, and toxic content.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>HTTP API</h3>
-                    <p>Create custom API endpoints on the fly.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== ФУТЕР ========== -->
-    <footer>
-        <div class="container">
-            <p>© 2026 <strong>Wentik</strong> — Built with ❤️ by <a href="https://github.com/itzrealexe-rgb">itzrealexe-rgb</a></p>
-        </div>
-    </footer>
-
-    <!-- ========== СКРИПТЫ ========== -->
-    <script src="js/auth.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/particles.js"></script>
-    <script>
-        // Анимация появления при скролле
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.feature-card, .stat-card').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(30px)';
-                el.style.transition = 'all 0.6s ease';
-                observer.observe(el);
-            });
-        });
-    </script>
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#0a0a0f;color:#e0e0e0;font-family:sans-serif;flex-direction:column;gap:20px;">
+        <div style="font-size:48px;">⏳</div>
+        <h1>Logging in...</h1>
+        <p style="color:#707070;">Please wait while we connect to Discord.</p>
+    </div>
 </body>
 </html>
