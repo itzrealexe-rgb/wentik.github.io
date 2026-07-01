@@ -2,13 +2,21 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Servers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servers — Wentik</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div id="particles"></div>
+    <div class="gradient-bg"></div>
+
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo"><span class="logo-icon">⚡</span><span class="logo-text">Wentik</span></div>
+            <div class="nav-logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Wentik</span>
+            </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="servers.html">Servers</a>
@@ -17,11 +25,15 @@
             </div>
         </div>
     </nav>
+
     <div class="container" style="padding:40px 0;">
-        <h1 style="color:#fff;">📡 Servers</h1>
-        <div id="server-list" style="color:#a0a0a0;">Loading...</div>
+        <h1 style="color:#fff;font-size:28px;margin-bottom:8px;">📡 Servers</h1>
+        <p style="color:#a0a0a0;margin-bottom:30px;">All servers where the bot is present</p>
+        <div id="server-list"><div class="loading">Loading</div></div>
     </div>
+
     <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
+    <script src="js/servers.js"></script>
+    <script src="js/particles.js"></script>
 </body>
 </html>
