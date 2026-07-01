@@ -2,11 +2,13 @@ const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
 
 async function loadServers() {
     const container = document.getElementById('server-list');
+    if (!container) return;
+    
+    container.innerHTML = '<div class="loading">Loading...</div>';
     
     try {
         const res = await fetch(`${API_BASE}/api/servers`);
         const data = await res.json();
-        
         const servers = Object.values(data.servers || {});
         
         if (servers.length === 0) {
