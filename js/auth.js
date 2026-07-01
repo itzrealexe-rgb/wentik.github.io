@@ -1,6 +1,5 @@
-// ========== КОНФИГ ==========
-let CONFIG = null;
 const API_BASE = 'https://discrod-aternos-server-production.up.railway.app';
+let CONFIG = null;
 
 async function loadConfig() {
     if (CONFIG) return CONFIG;
@@ -9,12 +8,11 @@ async function loadConfig() {
         CONFIG = await res.json();
         return CONFIG;
     } catch (e) {
-        console.error('Failed to load config:', e);
+        console.error('Config load error:', e);
         return null;
     }
 }
 
-// ========== КУКИ ==========
 function setCookie(name, value, days = 30) {
     const expires = new Date(Date.now() + days * 86400000).toUTCString();
     document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/; SameSite=Lax`;
@@ -23,8 +21,7 @@ function setCookie(name, value, days = 30) {
 function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     if (match) {
-        try { return JSON.parse(decodeURIComponent(match[2])); } 
-        catch (e) { return null; }
+        try { return JSON.parse(decodeURIComponent(match[2])); } catch { return null; }
     }
     return null;
 }
@@ -33,19 +30,11 @@ function deleteCookie(name) {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
 }
 
-// ========== ПОЛЬЗОВАТЕЛЬ ==========
 function getUser() {
-    const cookieUser = getCookie('user');
-    if (cookieUser) return cookieUser;
-    
-    const localUser = localStorage.getItem('user');
-    if (localUser) {
-        try {
-            const parsed = JSON.parse(localUser);
-            setCookie('user', parsed);
-            return parsed;
-        } catch (e) {}
-    }
+    const c = getCookie('user');
+    if (c) return c;
+    const l = localStorage.getItem('user');
+    if (l) { try { const p = JSON.parse(l); setCookie('user', p); return p; } catch {} }
     return null;
 }
 
@@ -64,37 +53,42 @@ function getToken() {
 }
 
 function logout() {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-    deleteCookie('user');
-    deleteCookie('token');
+    localStorage.clear();
+    ['user', 'token', 'cookie_consent'].forEach(c => deleteCookie(c));
     window.location.href = '/';
 }
 
-// ========== ЛОГИН ==========
 async function loginWithDiscord() {
     const config = await loadConfig();
-    if (!config) {
-        alert('Failed to load config');
-        return;
-    }
-    const url = `https://discord.com/oauth2/authorize?client_id=${config.discord.clientId}&redirect_uri=${encodeURIComponent(config.discord.redirectUri)}&response_type=code&scope=identify%20guilds%20guilds.members.read`;
+    if (!config) { alert('Config error'); return; }
+    const url = `https://discord.com/oauth2/authorize?client_id=${config.discord.clientId}&redirect_uri=${encodeURIComponent(config.discord.redirectUri)}&response_type=code&scope=identify%20guilds`;
     window.location.href = url;
 }
 
-// ========== COOKIE CONSENT ==========
+function updateAuthButton() {
+    const user = getUser();
+    const btns = document.querySelectorAll('.auth-btn');
+    btns.forEach(btn => {
+        if (user && user.username) {
+            btn.textContent = `👤 ${user.username}`;
+            btn.onclick = (e) => { e.preventDefault(); logout(); };
+        } else {
+            btn.textContent = 'Login with Discord';
+            btn.onclick = (e) => { e.preventDefault(); loginWithDiscord(); };
+        }
+    });
+}
+
 function showCookieConsent() {
     if (getCookie('cookie_consent')) return;
-    
     const div = document.createElement('div');
     div.className = 'cookie-consent show';
     div.innerHTML = `
-        <p>🍪 We use cookies to keep you logged in.</p>
+        <p>🍪 We use cookies.</p>
         <button class="btn btn-primary" id="accept-cookies">Accept</button>
         <button class="btn btn-secondary" id="decline-cookies">Decline</button>
     `;
     document.body.appendChild(div);
-    
     document.getElementById('accept-cookies').onclick = () => {
         setCookie('cookie_consent', true);
         div.remove();
@@ -105,33 +99,15 @@ function showCookieConsent() {
     };
 }
 
-// ========== INIT ==========
 document.addEventListener('DOMContentLoaded', () => {
     loadConfig();
     showCookieConsent();
-    
-    const authBtn = document.getElementById('auth-btn');
-    if (authBtn) {
-        const user = getUser();
-        if (user && user.username) {
-            authBtn.textContent = `👤 ${user.username}`;
-            authBtn.onclick = (e) => {
-                e.preventDefault();
-                logout();
-            };
-        } else {
-            authBtn.textContent = 'Login with Discord';
-            authBtn.onclick = (e) => {
-                e.preventDefault();
-                loginWithDiscord();
-            };
-        }
-    }
+    updateAuthButton();
 });
 
-// ========== EXPORT ==========
 window.loginWithDiscord = loginWithDiscord;
 window.logout = logout;
 window.getUser = getUser;
 window.getToken = getToken;
 window.loadConfig = loadConfig;
+window.updateAuthButton = updateAuthButton;
