@@ -13,7 +13,7 @@ body {
     position: relative;
 }
 
-/* ========== ФОН С ТОЧКАМИ ========== */
+/* ========== АНИМИРОВАННЫЙ ФОН ========== */
 .gradient-bg {
     position: fixed;
     top: 0;
@@ -26,9 +26,61 @@ body {
         radial-gradient(ellipse at 50% 100%, rgba(88, 101, 242, 0.05) 0%, transparent 50%);
     z-index: -2;
     pointer-events: none;
+    animation: gradientShift 15s ease-in-out infinite;
 }
 
-/* ========== ЧАСТИЦЫ ========== */
+@keyframes gradientShift {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* ========== СВЕТЯЩИЕСЯ ШАРЫ ========== */
+.glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -1;
+    animation: orbFloat 20s ease-in-out infinite;
+}
+
+.glow-orb-1 {
+    width: 600px;
+    height: 600px;
+    background: rgba(88, 101, 242, 0.15);
+    top: -200px;
+    left: -200px;
+    animation-delay: 0s;
+}
+
+.glow-orb-2 {
+    width: 500px;
+    height: 500px;
+    background: rgba(235, 69, 158, 0.12);
+    bottom: -150px;
+    right: -150px;
+    animation-delay: -7s;
+}
+
+.glow-orb-3 {
+    width: 400px;
+    height: 400px;
+    background: rgba(88, 101, 242, 0.08);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(50px, -50px) scale(1.1); }
+    50% { transform: translate(-30px, 30px) scale(0.9); }
+    75% { transform: translate(40px, 20px) scale(1.05); }
+}
+
+/* ========== ЧАСТИЦЫ (ТОЧКИ) ========== */
 #particles {
     position: fixed;
     top: 0;
@@ -46,28 +98,24 @@ body {
     height: 3px;
     background: rgba(88, 101, 242, 0.6);
     border-radius: 50%;
-    animation: float linear infinite;
-    box-shadow: 0 0 10px rgba(88, 101, 242, 0.3);
+    animation: floatParticle linear infinite;
+    box-shadow: 0 0 10px rgba(88, 101, 242, 0.2);
 }
 
-@keyframes float {
+@keyframes floatParticle {
     0% {
         transform: translateY(100vh) scale(0);
         opacity: 0;
     }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
     100% {
         transform: translateY(-10vh) scale(1);
         opacity: 0;
     }
 }
 
-/* ========== АНИМАЦИИ ПОЯВЛЕНИЯ ========== */
+/* ========== ПОЯВЛЕНИЕ ЭЛЕМЕНТОВ ========== */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -94,19 +142,18 @@ body {
     100% { background-position: 200% 0; }
 }
 
-.hero, .features, .stat-card, .feature-card {
-    animation: fadeInUp 0.8s ease forwards;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.features {
-    animation-delay: 0.2s;
-}
-
-.feature-card:nth-child(2) { animation-delay: 0.3s; }
-.feature-card:nth-child(3) { animation-delay: 0.4s; }
-.feature-card:nth-child(4) { animation-delay: 0.5s; }
-
-/* ========== NAVBAR ========== */
+/* ========== НАВИГАЦИЯ ========== */
 .navbar {
     background: rgba(10, 10, 15, 0.85);
     backdrop-filter: blur(20px);
@@ -176,11 +223,13 @@ body {
     transition: width 0.3s;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
     color: #fff;
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
     width: 100%;
 }
 
@@ -250,23 +299,11 @@ body {
     transform: scale(1.05);
 }
 
-.btn-danger {
-    background: #ED4245;
-    color: #fff;
-    padding: 6px 14px;
-    font-size: 12px;
-    border-radius: 8px;
-}
-
-.btn-danger:hover {
-    background: #c0353a;
-    transform: scale(1.05);
-}
-
-/* ========== HERO ========== */
+/* ========== ГЕРОЙ ========== */
 .hero {
     padding: 80px 0 60px;
     text-align: center;
+    animation: fadeInUp 0.8s ease;
 }
 
 .hero-container {
@@ -330,7 +367,8 @@ body {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.3s;
+    transition: all 0.4s;
+    animation: fadeInUp 0.8s ease;
 }
 
 .stat-card:hover {
@@ -354,7 +392,7 @@ body {
     margin-top: 4px;
 }
 
-/* ========== FEATURES ========== */
+/* ========== ФИЧИ ========== */
 .features {
     padding: 80px 0;
     background: rgba(255, 255, 255, 0.02);
@@ -416,7 +454,7 @@ body {
     line-height: 1.5;
 }
 
-/* ========== FOOTER ========== */
+/* ========== ФУТЕР ========== */
 footer {
     padding: 40px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -435,40 +473,24 @@ footer a:hover {
     color: #EB459E;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .hero-title {
-        font-size: 32px;
-    }
-    
-    .hero-stats {
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    
-    .stat-card {
-        padding: 15px 25px;
-        flex: 1;
-        min-width: 80px;
-    }
-    
-    .nav-links {
-        gap: 12px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .nav-links a {
-        font-size: 13px;
-    }
-    
-    .btn {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
+/* ========== ЛОКАЛЬНЫЕ СТРАНИЦЫ ========== */
+.page-header {
+    padding: 40px 0 20px;
+    animation: fadeInUp 0.6s ease;
 }
 
-/* ========== SERVER LIST ========== */
+.page-header h1 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.page-header p {
+    color: #a0a0a0;
+    font-size: 16px;
+}
+
+/* ========== СПИСОК СЕРВЕРОВ ========== */
 .server-item {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -479,6 +501,7 @@ footer a:hover {
     align-items: center;
     transition: all 0.3s;
     margin-bottom: 10px;
+    animation: slideIn 0.4s ease;
 }
 
 .server-item:hover {
@@ -486,22 +509,7 @@ footer a:hover {
     background: rgba(255, 255, 255, 0.05);
 }
 
-.server-name {
-    color: #fff;
-    font-weight: 600;
-}
-
-.server-info {
-    color: #a0a0a0;
-    font-size: 14px;
-}
-
-.server-actions {
-    display: flex;
-    gap: 10px;
-}
-
-/* ========== DASHBOARD ========== */
+/* ========== ДАШБОРД ========== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -538,7 +546,7 @@ footer a:hover {
     margin-top: 4px;
 }
 
-/* ========== LOADING SKELETON ========== */
+/* ========== ЛОАДИНГ ========== */
 .loading {
     color: #707070;
     text-align: center;
@@ -557,7 +565,7 @@ footer a:hover {
     75% { content: '...'; }
 }
 
-/* ========== COOKIE CONSENT ========== */
+/* ========== КУКИ ========== */
 .cookie-consent {
     position: fixed;
     bottom: 20px;
@@ -588,4 +596,37 @@ footer a:hover {
 
 .cookie-consent .btn {
     margin-right: 10px;
+}
+
+/* ========== АДАПТИВ ========== */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 32px;
+    }
+    
+    .hero-stats {
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .stat-card {
+        padding: 15px 25px;
+        flex: 1;
+        min-width: 80px;
+    }
+    
+    .nav-links {
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav-links a {
+        font-size: 13px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
 }
