@@ -8,10 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Частицы на фоне -->
+    <!-- ========== АНИМИРОВАННЫЙ ФОН С ТОЧКАМИ ========== -->
     <div id="particles"></div>
     <div class="gradient-bg"></div>
-    
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+
+    <!-- ========== НАВИГАЦИЯ ========== -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -19,7 +23,7 @@
                 <span class="logo-text">Wentik</span>
             </div>
             <div class="nav-links">
-                <a href="index.html">Home</a>
+                <a href="index.html" class="active">Home</a>
                 <a href="servers.html">Servers</a>
                 <a href="dashboard.html">Dashboard</a>
                 <a href="#" id="auth-btn" class="btn btn-discord">Login with Discord</a>
@@ -27,17 +31,22 @@
         </div>
     </nav>
 
-    <header class="hero">
+    <!-- ========== ГЕРОЙ ========== -->
+    <section class="hero">
         <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-badge">🔥 BETA</div>
-                <h1 class="hero-title">Your Discord Bot <span>Control Center</span></h1>
-                <p class="hero-desc">Manage your bots, monitor servers, and control everything from one place.</p>
-                <div class="hero-buttons">
-                    <a href="servers.html" class="btn btn-primary">Get Started</a>
-                    <a href="dashboard.html" class="btn btn-secondary">Dashboard</a>
-                </div>
+            <div class="hero-badge">🔥 BETA</div>
+            <h1 class="hero-title">
+                Your Discord Bot <br><span>Control Center</span>
+            </h1>
+            <p class="hero-desc">
+                Manage your bots, monitor servers, and control everything from one place.
+            </p>
+            <div class="hero-buttons">
+                <a href="servers.html" class="btn btn-primary">Get Started</a>
+                <a href="dashboard.html" class="btn btn-secondary">Dashboard</a>
             </div>
+            
+            <!-- ========== СТАТИСТИКА ========== -->
             <div class="hero-stats">
                 <div class="stat-card">
                     <div class="stat-number" id="stat-servers">0</div>
@@ -53,8 +62,9 @@
                 </div>
             </div>
         </div>
-    </header>
+    </section>
 
+    <!-- ========== ФИЧИ ========== -->
     <section class="features">
         <div class="container">
             <h2 class="section-title">🚀 Features</h2>
@@ -83,14 +93,36 @@
         </div>
     </section>
 
+    <!-- ========== ФУТЕР ========== -->
     <footer>
         <div class="container">
             <p>© 2026 <strong>Wentik</strong> — Built with ❤️ by <a href="https://github.com/itzrealexe-rgb">itzrealexe-rgb</a></p>
         </div>
     </footer>
 
+    <!-- ========== СКРИПТЫ ========== -->
     <script src="js/auth.js"></script>
     <script src="js/main.js"></script>
     <script src="js/particles.js"></script>
+    <script>
+        // Анимация появления при скролле
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.feature-card, .stat-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'all 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 </html>
